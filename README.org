@@ -64,5 +64,67 @@ Each time-out value from the datasheet is rounded when needed and it's represent
 2. ATtiny25/45/85
 3. ATmega328P
 
+*** Performance
+
+**** ~on(at_4s)~
+~avr-gcc 10.2 -Os -mmcu=attiny85~
+#+BEGIN_SRC
+in	r24, 0x3f
+cli
+wdr
+ldi	r25, 0x28
+out	0x21, r25
+out	0x3f, r24
+#+END_SRC
+
+**** ~on(at_4s, mode::interrupt)~
+~avr-gcc 10.2 -Os -mmcu=attiny85~
+#+BEGIN_SRC
+in	r24, 0x3f
+cli              
+wdr              
+ldi	r25, 0x60
+out	0x21, r25
+out	0x3f, r24
+#+END_SRC
+
+**** ~on(at_4s, mode::interrupt_reset, assume_atomic)~
+~avr-gcc 10.2 -Os -mmcu=attiny85~
+#+BEGIN_SRC
+wdr              
+ldi	r24, 0x68
+out	0x21, r24
+#+END_SRC
+
+**** ~on(at_16ms)~ 
+~avr-gcc 10.2 -Os -mmcu=atmega328p~
+#+BEGIN_SRC
+in	r24, 0x3f  
+cli                
+wdr                
+ldi	r25, 0x18  
+sts	0x0060, r25
+ldi	r25, 0x08  
+sts	0x0060, r25
+out	0x3f, r24  
+#+END_SRC
+
+**** ~off()~
+~avr-gcc 10.2 -Os -mmcu=attiny85~
+#+BEGIN_SRC
+in	r25, 0x3f 
+cli               
+wdr               
+in	r24, 0x34 
+andi	r24, 0xF7 
+out	0x34, r24 
+in	r24, 0x21 
+ori	r24, 0x18 
+out	0x21, r24 
+out	0x21, r1  
+out	0x3f, r25 
+#+END_SRC
+
 *** Contributions
 Help me to improve this work. If you saw a flaw or you have found out a bug, don't hesitate to open an issue about it. If you like what you see but your MCU is not supported, I will appreciate your help to support a new MCU :)
+
