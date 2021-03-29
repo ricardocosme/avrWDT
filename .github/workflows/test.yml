@@ -19,6 +19,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@main
+        with:
+          path: avrWDT
 
       - name: Checkout avrIO
         uses: actions/checkout@main
@@ -33,8 +35,8 @@ jobs:
           path: avrINT
           
       - name: Build docker image
-        run: docker build -t avr-gcc -f .github/workflows/Dockerfile .
+        run: docker build -t avr-gcc -f avrWDT/.github/workflows/Dockerfile .
 
       - name: Tests
-        run: docker run -v $(pwd):/build -w/build avr-gcc make -B test
+        run: docker run -v $(pwd):/build -w/build avr-gcc make -B test -C avrWDT
         
