@@ -19,7 +19,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@main
-      
+
+      - name: Checkout avrIO
+        uses: actions/checkout@main
+        with:
+          repository: ricardocosme/avrIO
+          path: avrIO
+          
+      - name: Checkout avrINT
+        uses: actions/checkout@main
+        with:
+          repository: ricardocosme/avrINT
+          path: avrINT
+          
       - name: Build docker image
         run: docker build -t avr-gcc -f .github/workflows/Dockerfile .
 
