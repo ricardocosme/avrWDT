@@ -46,7 +46,7 @@ The last argument named ~AssumeAtomic~ can be used to inform that the function w
 Resets the watchdog timer using the instruction ~wdr~.
 
 **** Timeouts
-The set of time-out values allowed to be used is dependent to the MCU. The header [[file:include/avr/wdt/timeout.hpp][avr/wdt/timeout.hpp]] should be used to find out the definitions. For example, the MCU ~ATmega328P~ is using the definitions presented at [[file:include/avr/wdt/timeout/common.hpp][avr/wdt/timeout/common.hpp]] becaused there isn't any specific header to the platform. 
+The set of time-out values allowed to be used is dependent from the MCU. The header [[file:include/avr/wdt/timeout.hpp][avr/wdt/timeout.hpp]] should be used to find out the definitions. For example, the MCU ~ATmega328P~ is using the definitions presented at [[file:include/avr/wdt/timeout/common.hpp][avr/wdt/timeout/common.hpp]] becaused there isn't any specific header to the platform. 
 
 Each time-out value from the datasheet is rounded when needed and it's represented through a global object using the form ~at_<period>~. The type of the object is ~at_<period>_t~. For example, ~at_250ms~ and ~at_8s~.
 
