@@ -1,5 +1,5 @@
 ** avrWDT [[https://github.com/ricardocosme/avrWDT/actions?query=workflow%3A%22tests%22][https://github.com/ricardocosme/avrWDT/workflows/tests/badge.svg?branch=main]] [[https://github.com/ricardocosme/avrWDT/actions?query=workflow%3A%22demos%22][https://github.com/ricardocosme/avrWDT/workflows/demos/badge.svg?branch=main]]
-C++11 header-only library to setup a watchdog timer(WDT) using one single line with an expressive and type-safe syntax without adding any overhead to the generated code. 
+C++11/20 header-only library to setup a watchdog timer(WDT) using one single line with an expressive and type-safe syntax without adding any overhead to the generated code. 
 
 *** Demo
 #+BEGIN_SRC

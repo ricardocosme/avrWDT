@@ -54,8 +54,8 @@ enum class mode {
       //assuming that interrupts are disabled before the call to on()
       on(at_1s, mode::interrupt, assume_atomic);
  */
-template<typename Timeout, typename AssumeAtomic = dont_assume_atomic_t,
-         typename = detail::enable_if<is_timeout<Timeout>::value> >
+template<typename Timeout, typename AssumeAtomic = dont_assume_atomic_t>
+AVR_WDT_REQUIRES_TIMEOUT
 inline void on(Timeout timeout,
                mode mode_ = mode::reset,
                AssumeAtomic assume_atomic_ = AssumeAtomic{}) noexcept
