@@ -11,8 +11,10 @@ enum class timeout {
     at_500ms,
     at_1s,
     at_2s,
+#if AVR_IO_WDT_HAS_WDP3
     at_4s,
     at_8s,
+#endif
 };
              
 }}
