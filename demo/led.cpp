@@ -24,7 +24,9 @@ AVRINT_WDT() {
 int main() {
     led.out(); /** setup PB0 as an output pin */
 
-    wdt::on(at_2s, mode::interrupt, assume_atomic); /** enable the WDT [1] */
+    /** enable the WDT [1] */
+    wdt::on(timeout::at_2s, mode::interrupt, assume_atomic);
+    
     interrupt::on(); /** enable interrupts */
     while(true)
         led.high();

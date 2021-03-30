@@ -1,18 +1,18 @@
 ** avrWDT [[https://github.com/ricardocosme/avrWDT/actions?query=workflow%3A%22tests%22][https://github.com/ricardocosme/avrWDT/workflows/tests/badge.svg?branch=main]] [[https://github.com/ricardocosme/avrWDT/actions?query=workflow%3A%22demos%22][https://github.com/ricardocosme/avrWDT/workflows/demos/badge.svg?branch=main]]
-C++11/20 header-only library to setup a watchdog timer(WDT) using one single line with an expressive and type-safe syntax without any overhead to the generated code. 
+C++11 header-only library to setup a watchdog timer(WDT) using one single line with an expressive and type-safe syntax without any overhead to the generated code. 
 
 *** Demo
 #+BEGIN_SRC
 using namespace avr::wdt;
 
 //turn on the WDT to interrupt at each 4s.
-wdt::on(at_4s, mode::interrupt); 
+wdt::on(timeout::at_4s, mode::interrupt); 
 
 //turn on the WDT to reset at each 16ms.
-wdt::on(at_16ms, mode::reset); 
+wdt::on(timeout::at_16ms, mode::reset); 
 
 //turn on the WDT to interrupt and reset at each 250ms.
-wdt::on(at_250ms, mode::interrupt_reset); 
+wdt::on(timeout::at_250ms, mode::interrupt_reset); 
 
 wdt::off(); //turn off the WDT
 wdt::reset(); /reset the WDT
@@ -23,8 +23,8 @@ Note, simplifications are taken into account in order to achieve a more expressi
 
 **** Enable WDT
 #+BEGIN_SRC
-template<typename Timeout, typename AssumeAtomic = dont_assume_atomic_t>
-void on(Timeout, mode = mode::reset, AssumeAtomic = AssumeAtomic{})
+template<typename AssumeAtomic = dont_assume_atomic_t>
+void on(timeout, mode = mode::reset, AssumeAtomic = AssumeAtomic{})
 #+END_SRC
 Enables the watchdog timer using a valid timeout to the MCU. The default mode is ~mode::reset~, which means that a system reset occurs when the timer reachs the time-out value. There are other two modes: ~mode::interrupt~ and ~mode::interrupt_reset~. The first one only gives an interrupt and the second one gives an interrupt and after that a system reset occurs
 
@@ -47,8 +47,6 @@ Resets the watchdog timer using the instruction ~wdr~.
 
 **** Timeouts
 The set of time-out values allowed to be used is dependent from the MCU. The header [[file:include/avr/wdt/timeout.hpp][avr/wdt/timeout.hpp]] should be used to find out the definitions. For example, the MCU ~ATmega328P~ is using the definitions presented at [[file:include/avr/wdt/timeout/common.hpp][avr/wdt/timeout/common.hpp]] becaused there isn't any specific header to the platform. 
-
-Each time-out value from the datasheet is rounded when needed and it's represented through a global object using the form ~at_<period>~. The type of the object is ~at_<period>_t~. For example, ~at_250ms~ and ~at_8s~.
 
 *** How to use it?
 1. Add the ~include~ directory to your include path and check if it contains the paths to the dependencies [[https://github.com/ricardocosme/avrIO][avrIO]] and [[https://github.com/ricardocosme/avrINT][avrINT]].

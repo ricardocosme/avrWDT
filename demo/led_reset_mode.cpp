@@ -15,7 +15,10 @@ static auto& led{pb0};
 
 int main() {
     led.out(); /** setup PB0 as an output pin */
-    wdt::on(at_1s, mode::reset, assume_atomic); /** enable the WDT */
+
+    /** enable the WDT */
+    wdt::on(timeout::at_1s, mode::reset, assume_atomic);
+    
     _delay_ms(500);
     while(true)
         led.high();
