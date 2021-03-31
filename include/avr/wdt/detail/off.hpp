@@ -22,7 +22,7 @@ inline void off() noexcept {
 }
 
 inline void off(dont_assume_atomic_t) noexcept {
-    auto s = avr::interrupt::make_atomic();
+    avr::interrupt::atomic s;
     off();
 }
 

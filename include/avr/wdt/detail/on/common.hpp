@@ -42,7 +42,7 @@ inline void on(uint8_t enable, timeout timeout_) noexcept {
 }
 
 inline void on(uint8_t enable, timeout timeout_, dont_assume_atomic_t) noexcept {
-    auto s = avr::interrupt::make_atomic();
+    avr::interrupt::atomic s;
     on(enable, timeout_);
 }
 
