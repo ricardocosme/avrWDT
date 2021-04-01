@@ -25,15 +25,15 @@ int main() {
     led.out(); /** setup PB0 as an output pin */
 
     /** enable the WDT [1] */
-    wdt::on(timeout::at_2s, mode::interrupt, assume_atomic);
+    wdt::on(timeout::at_2s, mode::interrupt, atomic_precondition::yes);
     
     interrupt::on(); /** enable interrupts */
     while(true)
         led.high();
 }
 
-/** [1] We are using 'assume_atomic' here because we don't need
-    interrupts before the call that enables the WDT, so we can save
-    some bytes using the policy and enabling the interrupts only after
-    the call to 'on()'.
+/** [1] We are using 'atomic_precondition::yes' here because we don't
+    need interrupts before the call that enables the WDT, so we can
+    save some bytes using the policy and enabling the interrupts only
+    after the call to 'on()'.
  */

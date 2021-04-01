@@ -1,6 +1,6 @@
 #pragma once
 
-#include "avr/wdt/assume_atomic.hpp"
+#include "avr/wdt/atomic_precondition.hpp"
 #include "avr/wdt/detail/bits.hpp"
 
 #include <avr/io.hpp>
@@ -9,7 +9,7 @@
 namespace avr { namespace wdt { namespace detail {
 
 [[gnu::always_inline]]
-inline void off() noexcept {
+inline void off() {
     using namespace avr::io;
     asm("wdr");
 #if AVR_IO_WDT_HAS_WDRF
@@ -21,12 +21,12 @@ inline void off() noexcept {
     detail::_wdtcr = 0x00;
 }
 
-inline void off(dont_assume_atomic_t) noexcept {
-    avr::interrupt::atomic s;
-    off();
+inline void off(atomic_precondition policy) {
+    if(policy == atomic_precondition::no) {
+        interrupt::atomic<> s;
+        off();
+    } else
+        off();
 }
-
-inline void off(assume_atomic_t) noexcept
-{ off(); }
 
 }}}

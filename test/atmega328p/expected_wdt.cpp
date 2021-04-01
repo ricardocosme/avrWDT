@@ -164,7 +164,7 @@ void on_8s() {
 }
 
 void on_dont_assume_atomic() {
-    auto s = avr::interrupt::make_atomic();
+    avr::interrupt::atomic<> s;
     asm("wdr");
     wdtcsr = {wde,wdce};
     wdtcsr = {wde};
@@ -178,7 +178,7 @@ void off_assume_atomic() {
 }
 
 void off_dont_assume_atomic() {
-    auto s = avr::interrupt::make_atomic();
+    avr::interrupt::atomic<> s;
     asm("wdr");
     mcusr.clear(wdrf);
     set(wdce,wde);

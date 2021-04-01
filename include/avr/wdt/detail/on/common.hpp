@@ -1,6 +1,6 @@
 #pragma once
 
-#include "avr/wdt/assume_atomic.hpp"
+#include "avr/wdt/atomic_precondition.hpp"
 #include "avr/wdt/timeout.hpp"
 
 #include <avr/interrupt.hpp>
@@ -10,7 +10,7 @@ namespace avr { namespace wdt { namespace detail {
 
 using namespace avr::io;
 
-inline void on(uint8_t enable, timeout timeout_) noexcept {
+inline void on(uint8_t enable, timeout timeout_) {
     asm("wdr");
 //optimize when the device doesn't require timed sequence
 #if AVR_IO_WDT_NEEDS_ON_TIMED_SEQ
@@ -41,12 +41,12 @@ inline void on(uint8_t enable, timeout timeout_) noexcept {
 #endif
 }
 
-inline void on(uint8_t enable, timeout timeout_, dont_assume_atomic_t) noexcept {
-    avr::interrupt::atomic s;
-    on(enable, timeout_);
+inline void on(uint8_t enable, timeout timeout_, atomic_precondition policy) {
+    if(policy == atomic_precondition::no) {
+        interrupt::atomic<> s;
+        on(enable, timeout_);
+    } else
+        on(enable, timeout_);
 }
-
-inline void on(uint8_t enable, timeout timeout_, assume_atomic_t) noexcept
-{ on(enable, timeout_); }
 
 }}}

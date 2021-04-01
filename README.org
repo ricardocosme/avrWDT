@@ -23,23 +23,21 @@ Note, simplifications are taken into account in order to achieve a more expressi
 
 **** Enable WDT
 #+BEGIN_SRC
-template<typename AssumeAtomic = dont_assume_atomic_t>
-void on(timeout, mode = mode::reset, AssumeAtomic = AssumeAtomic{})
+void on(timeout, mode = mode::reset, atomic_precondition policy = atomic_precondition::no)
 #+END_SRC
 Enables the watchdog timer using a valid timeout to the MCU. The default mode is ~mode::reset~, which means that a system reset occurs when the timer reachs the time-out value. There are other two modes: ~mode::interrupt~ and ~mode::interrupt_reset~. The first one only gives an interrupt and the second one gives an interrupt and after that a system reset occurs
 
 There are some MCUs that doesn't have the interrupt mode.
 
-The last argument named ~AssumeAtomic~ can be used to inform that the function will be executed in a safe context that doesn't allow interruptions during the execution. This is an optimization when interruptions aren't used by the system or when there is a precondition that interrupts are disabled.
+The last argument named ~policy~ can be used to inform that the function will be executed in a safe context that doesn't allow interrupts during the execution. This is an optimization when interrupts aren't used by the system or when there is a precondition that interrupts are disabled.
 
 **** Disable WDT
 #+BEGIN_SRC
-template<typename AssumeAtomic = dont_assume_atomic_t>
-void off(AssumeAtomic = AssumeAtomic{})
+void off(atomic_precondition policy = atomic_precondition::no)
 #+END_SRC
 Disables the watchdog timer.
 
-The last argument named ~AssumeAtomic~ can be used to inform that the function will be executed in a safe context that doesn't allow interruptions during the execution. This is an optimization when interruptions aren't used by the system or when there is a precondition that interrupts are disabled.
+See above about to know more about the optional argument ~policy~.
 
 **** Reset WDT
 ~void reset()~
@@ -86,7 +84,7 @@ out	0x21, r25
 out	0x3f, r24
 #+END_SRC
 
-**** ~on(timeout::at_4s, mode::interrupt_reset, assume_atomic)~
+**** ~on(timeout::at_4s, mode::interrupt_reset, atomic_precondition::yes)~
 ~avr-gcc 10.2 -Os -mmcu=attiny85~
 #+BEGIN_SRC
 wdr              

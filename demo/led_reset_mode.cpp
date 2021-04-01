@@ -17,13 +17,13 @@ int main() {
     led.out(); /** setup PB0 as an output pin */
 
     /** enable the WDT */
-    wdt::on(timeout::at_1s, mode::reset, assume_atomic);
+    wdt::on(timeout::at_1s, mode::reset, atomic_precondition::yes);
     
     _delay_ms(500);
     while(true)
         led.high();
 }
 
-/** [1] We are using 'assume_atomic' to save some bytes and cycles
-    because this program doesn't use interruptions.
+/** [1] We are using 'atomic_precondition::yes' to save some bytes and
+    cycles because this program doesn't use interrupts.
  */

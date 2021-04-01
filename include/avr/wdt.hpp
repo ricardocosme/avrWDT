@@ -1,6 +1,6 @@
 #pragma once
 
-#include "avr/wdt/assume_atomic.hpp"
+#include "avr/wdt/atomic_precondition.hpp"
 #include "avr/wdt/detail/bits.hpp"
 #include "avr/wdt/detail/off.hpp"
 #include "avr/wdt/detail/on.hpp"
@@ -10,7 +10,7 @@
 
 namespace avr { namespace wdt {
 
-[[gnu::always_inline]] inline void reset() noexcept
+[[gnu::always_inline]] inline void reset() 
 { asm("wdr"); }
 
 /** Watchdog timer mode
@@ -34,12 +34,7 @@ enum class mode {
 
     mode_: watchdor timer mode. Take a look at the enum class 'mode'.
 
-    [optional] assume_atomic_: policy to define if the operation to
-    enable the WDT assumes by precondition that it can't be
-    interrupted. The default behaviour is disable interrupts and
-    restore the initial state of SREG at the end of the operation. If
-    'assume_atomic' is passed then the operation assumes that the
-    caller have disabled interrupts or interrupts aren't used.
+    [optional] policy: see 'avr/wdt/atomic_precondition.hpp'.
 
     Example:
 
@@ -51,12 +46,11 @@ enum class mode {
    
       //Turn on the watchdog in System Reset mode with a timeout of 1s
       //assuming that interrupts are disabled before the call to on()
-      on(timeout::at_1s, mode::interrupt, assume_atomic);
+      on(timeout::at_1s, mode::interrupt, atomic_precondition::yes);
  */
-template<typename AssumeAtomic = dont_assume_atomic_t>
 inline void on(timeout timeout_,
                mode mode_ = mode::reset,
-               AssumeAtomic assume_atomic_ = AssumeAtomic{}) noexcept
+               atomic_precondition policy = atomic_precondition::no) 
 {
     uint8_t enable;
     if(mode_ == mode::reset) enable = avr::io::wde.bv();
@@ -64,20 +58,14 @@ inline void on(timeout timeout_,
     else if(mode_ == mode::interrupt) enable = detail::_wdie.bv();
     else enable = avr::io::wde.bv() | detail::_wdie.bv();
 #endif
-    detail::on(enable, timeout_, assume_atomic_);
+    detail::on(enable, timeout_, policy);
 }
 
 /** Disable watchdog timer 
 
-    [optional] assume_atomic_: policy to define if the operation to
-    enable the WDT assumes by precondition that it can't be
-    interrupted. The default behaviour is disable interrupts and
-    restore the initial state of SREG at the end of the operation. If
-    'assume_atomic' is passed then the operation assumes that the
-    caller have disabled interrupts or interrupts aren't used.
+    [optional] policy: see 'avr/wdt/atomic_precondition.hpp'.
 */
-template<typename AssumeAtomic = dont_assume_atomic_t>
-inline void off(AssumeAtomic assume_atomic_ = AssumeAtomic{}) noexcept
-{ detail::off(assume_atomic_); }
+inline void off(atomic_precondition policy = atomic_precondition::no) 
+{ detail::off(policy); }
 
 }}
